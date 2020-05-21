@@ -100,7 +100,7 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 
 		map.addLayer(
 			{
-				id: "coronaboundInvisible",
+				id: "coronabound",
 				type: "fill",
 				"source": {
 					"type": "vector",
@@ -112,33 +112,42 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 				maxzoom: 20,
 				layout: {},
 				paint: {
-					"fill-color": "rgba(255,255,255,0)"
-					//"stroke-width": 1
+					'fill-opacity': [
+							'interpolate',
+							  ['linear'],
+							  // ['zoom'] indicates zoom, default at lowest number, threshold, value above threshold
+							  ['zoom'],
+							  8, 0,
+							  9, 1
+						],
+					"fill-color": "rgba(255,255,255,0)",
+					// "fill-outline": "grey",
+					"fill-outline-color": "grey"
 				}
 			},
 			"place_suburb"
 		);
 
-		map.addLayer(
-			{
-				id: "coronabound",
-				type: "line",
-				"source": {
-					"type": "vector",
-					"tiles": ["https://cdn.ons.gov.uk/maptiles/t30/boundaries/{z}/{x}/{y}.pbf"],
-					//"tiles": ["https://cdn.ons.gov.uk/maptiles/t23/boundaries/{z}/{x}/{y}.pbf"],
-				},
-				"source-layer": "boundaries",
-				minzoom: 9,
-				maxzoom: 20,
-				layout: {},
-				paint: {
-					"line-color": "grey",
-					"line-width": 1
-				}
-			},
-			"place_suburb"
-		);
+		// map.addLayer(
+		// 	{
+		// 		id: "coronabound",
+		// 		type: "line",
+		// 		"source": {
+		// 			"type": "vector",
+		// 			"tiles": ["https://cdn.ons.gov.uk/maptiles/t30/boundaries/{z}/{x}/{y}.pbf"],
+		// 			//"tiles": ["https://cdn.ons.gov.uk/maptiles/t23/boundaries/{z}/{x}/{y}.pbf"],
+		// 		},
+		// 		"source-layer": "boundaries",
+		// 		minzoom: 9,
+		// 		maxzoom: 20,
+		// 		layout: {},
+		// 		paint: {
+		// 			"line-color": "grey",
+		// 			"line-width": 1
+		// 		}
+		// 	},
+		// 	"place_suburb"
+		// );
 
 		map.addLayer(
 			{
@@ -233,8 +242,8 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 		map.fitBounds(bounds);
 
 
-	map.on("mousemove", "coronaboundInvisible", onMove);
-	map.on("mouseleave", "coronaboundInvisible", onLeave);
+	map.on("mousemove", "coronabound", onMove);
+	map.on("mouseleave", "coronabound", onLeave);
 	map.on("click", "corona", onClick);
 
 			});
@@ -260,7 +269,7 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 			]);
 
 			var features = map.queryRenderedFeatures(e.point, {
-				layers: ["coronaboundInvisible"]
+				layers: ["coronabound"]
 			});
 
 			if (features.length != 0) {
@@ -465,7 +474,7 @@ $(document).on('input', '.clearable', function(){
 
 		var tilechecker = setInterval(function(){
 			 features=null
-		 	features = map.queryRenderedFeatures(point,{layers: ['coronaboundInvisible']});
+		 	features = map.queryRenderedFeatures(point,{layers: ['coronabound']});
 		 	if(features.length != 0){
 		 		 //onrender(),
 		 		//map.setFilter("coronahover", ["==", "areacd", features[0].properties.areacd]);
@@ -496,14 +505,14 @@ $(document).on('input', '.clearable', function(){
 	};
 
 	function disableMouseEvents() {
-			map.off("mousemove", "coronaboundInvisible", onMove);
-			map.off("mouseleave", "coronaboundInvisible", onLeave);
+			map.off("mousemove", "coronabound", onMove);
+			map.off("mouseleave", "coronabound", onLeave);
 	}
 
 	function enableMouseEvents() {
-			map.on("mousemove", "coronaboundInvisible", onMove);
+			map.on("mousemove", "coronabound", onMove);
 			map.on("click", "corona", onClick);
-			map.on("mouseleave", "coronaboundInvisible", onLeave);
+			map.on("mouseleave", "coronabound", onLeave);
 	}
 
 

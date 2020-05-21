@@ -31,11 +31,10 @@
   "sources": {
     "openmaptiles": {
       "type": "vector",
-      "url": "https://api.maptiler.com/tiles/v3/tiles.json?key=Qi2gszp5uSG09U66VCvH"
+      "tiles": ["https://cdn.ons.gov.uk/maptiles/osm/v1/{z}/{x}/{y}.pbf"]
     }
   },
-  "sprite": "https://openmaptiles.github.io/positron-gl-style/sprite",
-  "glyphs": "https://api.maptiler.com/fonts/{fontstack}/{range}.pbf?key=Qi2gszp5uSG09U66VCvH",
+  "glyphs": "https://cdn.ons.gov.uk/maptiles/osm/fontsv1/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -251,12 +250,11 @@
         "LineString"
       ],
       "layout": {
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name:en}",
         "symbol-placement": "line",
         "text-rotation-alignment": "map",
         "symbol-spacing": 500,
         "text-font": [
-          "Metropolis Medium Italic",
           "Open Sans Italic"
         ],
         "text-size": 12
@@ -1380,14 +1378,13 @@
         "text-transform": "none",
         "symbol-spacing": 350,
         "text-font": [
-          "Metropolis Regular",
           "Open Sans Regular"
         ],
         "symbol-placement": "line",
         "visibility": "visible",
         "text-rotation-alignment": "map",
         "text-pitch-alignment": "viewport",
-        "text-field": "{name:latin} {name:nonlatin}"
+        "text-field": "{name:en}"
       },
       "paint": {
         "text-color": "#bbb",
@@ -1425,7 +1422,6 @@
         "text-size": 10,
         "symbol-spacing": 350,
         "text-font": [
-          "Metropolis Light",
           "Open Sans Regular"
         ],
         "symbol-placement": "line",
@@ -1564,7 +1560,6 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "Metropolis Regular",
           "Open Sans Regular"
         ],
         "text-justify": "center",
@@ -1574,7 +1569,7 @@
           0
         ],
         "text-anchor": "center",
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name:en}",
         "text-keep-upright": false
       },
       "paint": {
@@ -1610,7 +1605,6 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "Metropolis Regular",
           "Open Sans Regular"
         ],
         "text-justify": "center",
@@ -1620,7 +1614,7 @@
           0
         ],
         "text-anchor": "center",
-        "text-field": "{name:latin}\n{name:nonlatin}"
+        "text-field": "{name:en}"
       },
       "paint": {
         "text-color": "rgb(117, 129, 145)",
@@ -1655,7 +1649,6 @@
         "text-size": 10,
         "text-transform": "none",
         "text-font": [
-          "Metropolis Regular",
           "Open Sans Regular"
         ],
         "text-justify": "left",
@@ -1666,7 +1659,7 @@
         ],
         "icon-size": 0.4,
         "text-anchor": "left",
-        "text-field": "{name:latin}\n{name:nonlatin}"
+        "text-field": "{name:en}"
       },
       "paint": {
         "text-color": "rgb(117, 129, 145)",
@@ -1700,31 +1693,12 @@
       ],
       "layout": {
         "text-size": 10,
-        "icon-image": {
-          "base": 1,
-          "stops": [
-            [
-              0,
-              "circle-11"
-            ],
-            [
-              8,
-              ""
-            ]
-          ]
-        },
         "text-transform": "none",
         "text-font": [
-          "Metropolis Regular",
           "Open Sans Regular"
         ],
         "text-justify": "left",
         "visibility": "visible",
-        "text-offset": [
-          0.5,
-          0.2
-        ],
-        "icon-size": 0.4,
         "text-anchor": {
           "base": 1,
           "stops": [
@@ -1738,7 +1712,7 @@
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}"
+        "text-field": "{name:en}"
       },
       "paint": {
         "text-color": "rgb(117, 129, 145)",
@@ -1785,31 +1759,12 @@
       ],
       "layout": {
         "text-size": 10,
-        "icon-image": {
-          "base": 1,
-          "stops": [
-            [
-              0,
-              "circle-11"
-            ],
-            [
-              8,
-              ""
-            ]
-          ]
-        },
         "text-transform": "none",
         "text-font": [
-          "Open Sans Regular",
           "Open Sans Regular"
         ],
         "text-justify": "left",
         "visibility": "visible",
-        "text-offset": [
-          0.5,
-          0.2
-        ],
-        "icon-size": 0.4,
         "text-anchor": {
           "base": 1,
           "stops": [
@@ -1823,7 +1778,7 @@
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}"
+        "text-field": "{name:en}"
       },
       "paint": {
         "text-color": "rgb(117, 129, 145)",
@@ -1865,30 +1820,12 @@
       ],
       "layout": {
         "text-size": 14,
-        "icon-image": {
-          "base": 1,
-          "stops": [
-            [
-              0,
-              "circle-11"
-            ],
-            [
-              8,
-              ""
-            ]
-          ]
-        },
         "text-transform": "none",
         "text-font": [
-          "Open Sans Regular",
           "Open Sans Regular"
         ],
         "text-justify": "left",
         "visibility": "visible",
-        "text-offset": [
-          0.5,
-          0.2
-        ],
         "icon-size": 1,
         "text-anchor": {
           "base": 1,
@@ -1903,7 +1840,7 @@
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}"
+        "text-field": "{name:en}"
       },
       "paint": {
         "text-color": "rgb(117, 129, 145)",
@@ -1950,31 +1887,12 @@
       ],
       "layout": {
         "text-size": 14,
-        "icon-image": {
-          "base": 1,
-          "stops": [
-            [
-              0,
-              "circle-11"
-            ],
-            [
-              8,
-              ""
-            ]
-          ]
-        },
         "text-transform": "none",
         "text-font": [
-          "Open Sans Regular",
           "Open Sans Regular"
         ],
         "text-justify": "left",
         "visibility": "visible",
-        "text-offset": [
-          0.5,
-          0.2
-        ],
-        "icon-size": 0.4,
         "text-anchor": {
           "base": 1,
           "stops": [
@@ -1988,7 +1906,7 @@
             ]
           ]
         },
-        "text-field": "{name:latin}\n{name:nonlatin}"
+        "text-field": "{name:en}"
       },
       "paint": {
         "text-color": "rgb(117, 129, 145)",
@@ -2022,9 +1940,8 @@
       ],
       "layout": {
         "visibility": "visible",
-        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-field": "{name:en}",
         "text-font": [
-          "Metropolis Regular",
           "Open Sans Regular"
         ],
         "text-transform": "none",
@@ -2065,9 +1982,8 @@
       ],
       "layout": {
         "visibility": "visible",
-        "text-field": "{name:latin}",
+        "text-field": "{name:en}",
         "text-font": [
-          "Metropolis Light Italic",
           "Open Sans Italic"
         ],
         "text-transform": "none",
@@ -2136,9 +2052,8 @@
       ],
       "layout": {
         "visibility": "visible",
-        "text-field": "{name:latin}",
+        "text-field": "{name:en}",
         "text-font": [
-          "Metropolis Regular",
           "Open Sans Regular"
         ],
         "text-transform": "none",
@@ -2207,9 +2122,8 @@
       ],
       "layout": {
         "visibility": "visible",
-        "text-field": "{name:latin}",
+        "text-field": "{name:en}",
         "text-font": [
-          "Open Sans Regular",
           "Open Sans Regular"
         ],
         "text-transform": "none",
