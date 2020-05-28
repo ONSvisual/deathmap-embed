@@ -92,7 +92,19 @@
           lng = data1.result.longitude;
           console.log(data1.result.msoa)
 
-          pymParent.sendMessage('msoacode', data1.result.msoa);
+          updateObj = {};
+
+          updateObj.postcode = postcode;
+
+          updateObj.coordinates = {}
+
+          updateObj.coordinates.latitude = lat;
+          updateObj.coordinates.longitude = lng;
+
+          console.log(updateObj);
+
+
+          pymParent.sendMessage('update', updateObj);
           //successpc(lat,lng)
         } else {
           $(".search-control").val("Sorry, invalid postcode.");

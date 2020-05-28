@@ -27,10 +27,6 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 		var areas = topojson.feature(geog, geog.objects[key]);
 	}
 
-	// for (key in geogbound.objects) {
-	// 	var areabounds = topojson.feature(geogbound, geogbound.objects[key]);
-	// }
-
 	const areabyid = [];
 	const cases = [];
 	const cases2 = [];
@@ -129,26 +125,6 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 			"place_suburb"
 		);
 
-		// map.addLayer(
-		// 	{
-		// 		id: "coronabound",
-		// 		type: "line",
-		// 		"source": {
-		// 			"type": "vector",
-		// 			"tiles": ["https://cdn.ons.gov.uk/maptiles/t30/boundaries/{z}/{x}/{y}.pbf"],
-		// 			//"tiles": ["https://cdn.ons.gov.uk/maptiles/t23/boundaries/{z}/{x}/{y}.pbf"],
-		// 		},
-		// 		"source-layer": "boundaries",
-		// 		minzoom: 9,
-		// 		maxzoom: 20,
-		// 		layout: {},
-		// 		paint: {
-		// 			"line-color": "grey",
-		// 			"line-width": 1
-		// 		}
-		// 	},
-		// 	"place_suburb"
-		// );
 
 		map.addLayer(
 			{
@@ -187,7 +163,6 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 				id: "coronahover",
 				type: "circle",
 				source: "area",
-				// "source-layer": "boundaries",
 				paint: {
 					"circle-radius": {
 						property: "casesPI",
@@ -280,39 +255,13 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 	}
 
 	//if pym gets a MSOA code from the parent
-	pymChild.onMessage('msoacode', receiveMSOAcode);
+	pymChild.onMessage('update', receiveUpdate);
 
-	function receiveMSOAcode(msoa) {
-	console.log(msoa);
-	console.log(data);
-
-	selectedArea = data.filter(function(d,i){return d.areanm == msoa})
-
-	map.setFilter("coronahover", [
-		"==",
-		"areacd",
-		selectedArea[0].areacd
-	]);
-
-	map.setFilter("coronaboundhover", [
-		"==",
-		"areacd",
-		selectedArea[0].areacd
-	]);
-
+	function receiveUpdate(updateObj) {
+		console.log(JSON.stringify(updateObj));
+	successpc(updateObj.coordinates.longitude,updateObj.coordinates.latitude)
 	disableMouseEvents();
 	showRemoveSelection();
-
-	selarea = areas.features.filter(function(d,i){return d.properties.areacd == selectedArea[0].areacd})//[0].features.properties)
-
-	map.flyTo({center:[selarea[0].geometry.coordinates[0],selarea[0].geometry.coordinates[1]], zoom:12})
-
-
-	setAxisVal(
-		msoa,
-		selectedArea[0].areanmhc,
-		selectedArea[0].cases
-	);
 	}
 
 	function onClick(e) {
