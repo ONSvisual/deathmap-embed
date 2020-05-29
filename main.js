@@ -258,10 +258,10 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 	pymChild.onMessage('update', receiveUpdate);
 
 	function receiveUpdate(updateObj) {
-		console.log(JSON.stringify(updateObj));
-	successpc(updateObj.coordinates.longitude,updateObj.coordinates.latitude)
-	disableMouseEvents();
-	showRemoveSelection();
+		pymobj = JSON.parse(updateObj);
+		successpc(pymobj.coordinates.latitude,pymobj.coordinates.longitude)
+		disableMouseEvents();
+		showRemoveSelection();
 	}
 
 	function onClick(e) {

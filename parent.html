@@ -104,7 +104,8 @@
           console.log(updateObj);
 
 
-          pymParent.sendMessage('update', updateObj);
+
+          pymParent.sendMessage('update', JSON.stringify(updateObj));
           //successpc(lat,lng)
         } else {
           $(".search-control").val("Sorry, invalid postcode.");
