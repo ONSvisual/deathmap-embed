@@ -65,7 +65,7 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 		style: "data/style.json",
 		center: [-3.5, 52.355],
 		maxBounds: [-17.1,45.7,19.1,61.0],
-		zoom: 6,
+		zoom: 5,
 		attributionControl: false
 	});
 
