@@ -32,7 +32,7 @@
     }
   },
   "sprite": "https://cdn.ons.gov.uk/maptiles/osm/spritesv1/sprite",
-  "glyphs": "https://cdn.ons.gov.uk/maptiles/osm/fontsv1/{fontstack}/{range}.pbf?key=Qi2gszp5uSG09U66VCvH",
+  "glyphs": "https://cdn.ons.gov.uk/maptiles/osm/fontsv1/{fontstack}/{range}.pbf",
   "layers": [
     {
       "id": "background",
@@ -258,8 +258,8 @@
         "text-size": 12
       },
       "paint": {
-        "text-color": "rgb(157,169,177)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1
       }
@@ -1429,7 +1429,7 @@
         "text-field": "{ref}"
       },
       "paint": {
-        "text-color": "rgb(117, 129, 145)",
+        "text-color": "rgb(50, 51, 33)",
         "text-halo-color": "hsl(0, 0%, 100%)",
         "text-translate": [
           0,
@@ -1571,8 +1571,8 @@
         "text-keep-upright": false
       },
       "paint": {
-        "text-color": "rgb(117, 129, 145)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1
       }
@@ -1615,8 +1615,8 @@
         "text-field": "{name:latin}\n{name:nonlatin}"
       },
       "paint": {
-        "text-color": "rgb(117, 129, 145)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1
       }
@@ -1660,8 +1660,8 @@
         "text-field": "{name:latin}\n{name:nonlatin}"
       },
       "paint": {
-        "text-color": "rgb(117, 129, 145)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
         "icon-opacity": 0.7
@@ -1731,8 +1731,8 @@
         "text-field": "{name:latin}\n{name:nonlatin}"
       },
       "paint": {
-        "text-color": "rgb(117, 129, 145)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
         "icon-opacity": 0.7
@@ -1815,8 +1815,8 @@
         "text-field": "{name:latin}\n{name:nonlatin}"
       },
       "paint": {
-        "text-color": "rgb(117, 129, 145)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
         "icon-opacity": 0.7
@@ -1894,8 +1894,8 @@
         "text-field": "{name:latin}\n{name:nonlatin}"
       },
       "paint": {
-        "text-color": "rgb(117, 129, 145)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
         "icon-opacity": 0.7
@@ -1978,8 +1978,8 @@
         "text-field": "{name:latin}\n{name:nonlatin}"
       },
       "paint": {
-        "text-color": "rgb(117, 129, 145)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1,
         "icon-opacity": 0.7
@@ -2017,8 +2017,8 @@
         "text-size": 10
       },
       "paint": {
-        "text-color": "rgb(113, 129, 144)",
-        "text-halo-color": "rgb(242,243,240)",
+        "text-color": "rgb(50, 51, 33)",
+        "text-halo-color": "rgb(255,255,255)",
         "text-halo-width": 1,
         "text-halo-blur": 1
       }
@@ -2072,7 +2072,7 @@
       },
       "paint": {
         "text-halo-width": 1.4,
-        "text-halo-color": "rgba(236,236,234,0.7)",
+        "text-halo-color": "rgba(255,255,255,1)",
         "text-color": {
           "base": 1,
           "stops": [
@@ -2142,7 +2142,7 @@
       },
       "paint": {
         "text-halo-width": 1.4,
-        "text-halo-color": "rgba(236,236,234,0.7)",
+        "text-halo-color": "rgba(255,255,255,1)",
         "text-color": {
           "base": 1,
           "stops": [
@@ -2217,7 +2217,7 @@
       },
       "paint": {
         "text-halo-width": 1.4,
-        "text-halo-color": "rgba(236,236,234,0.7)",
+        "text-halo-color": "rgba(255,255,255,1)",
         "text-color": {
           "base": 1,
           "stops": [

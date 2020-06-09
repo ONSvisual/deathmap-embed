@@ -2,10 +2,9 @@ var pymChild = new pym.Child();
 
 d3.queue()
 	.defer(d3.csv, "data/data.csv")
-	.defer(d3.json, "data/msoacentroidshp.json")
 	.await(ready);
 
-function ready(error, featureService, /*geogbound,*/ geog) {
+function ready(error, featureService, /*geogbound, geog*/) {
 
 
 	if (error) {
@@ -18,14 +17,27 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 			areacd: feature.areacd,
 			areanm: feature.areanm,
 			areanmhc: feature.areanmhc,
-			cases: feature.covid
+			cases: feature.covid,
+			casesMar: feature.covidmar,
+			casesApr: feature.covidapr,
+			casesMay: feature.covidmay
+
 		};
 	});
 
-	//convert topojson to geojson
-	for (key in geog.objects) {
-		var areas = topojson.feature(geog, geog.objects[key]);
-	}
+
+	dataAll = {}
+	dataMar = {}
+	dataApr = {}
+	dataMay = {}
+
+	data.forEach(function(d){
+		dataAll[d.areacd] = +d.cases,
+		dataMar[d.areacd] = +d.casesMar,
+		dataApr[d.areacd] = +d.casesApr,
+		dataMay[d.areacd] = +d.casesMay
+	});
+
 
 	const areabyid = [];
 	const cases = [];
@@ -39,17 +51,18 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 		areabyid[d.areacd] = d.areanm;
 	});
 
+
 	var maxvalue = d3.max(cases2);
 
-	areas.features.map(function(d, i) {
-		if (cases[d.properties.areacd] >= 0) {
-			d.properties.cases = cases[d.properties.areacd];
-			d.properties.casesPI = Math.sqrt(cases[d.properties.areacd]/Math.PI);
-			d.properties.areanmhc = areanmhc[d.properties.areacd];
-		} else {
-			d.properties.cases = 0;
-		}
-	});
+	// areas.features.map(function(d, i) {
+	// 	if (cases[d.properties.areacd] >= 0) {
+	// 		d.properties.cases = cases[d.properties.areacd];
+	// 		d.properties.casesPI = Math.sqrt(cases[d.properties.areacd]/Math.PI);
+	// 		d.properties.areanmhc = areanmhc[d.properties.areacd];
+	// 	} else {
+	// 		d.properties.cases = 0;
+	// 	}
+	// });
 
 	// areabounds.features.map(function(d, i) {
 	// 	if (cases[d.properties.areacd] >= 0) {
@@ -60,14 +73,13 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 	// });
 
 
-	const map = new mapboxgl.Map({
+	map = new mapboxgl.Map({
 		container: "map",
 		style: "data/style.json",
 		center: [-3.5, 52.355],
-		maxBounds: [-17.1,45.7,19.1,61.0],
 		zoom: 5,
 		attributionControl: false
-	});
+	})
 
 	//add fullscreen option
 	map.addControl(new mapboxgl.FullscreenControl());
@@ -82,17 +94,35 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 	map.touchZoomRotate.disableRotation();
 
 	//add compact attribution
+	// map.addControl(new mapboxgl.AttributionControl({
+	// 	compact: true
+	// }));
+
 	map.addControl(new mapboxgl.AttributionControl({
-		compact: true
-	}));
+		compact:true,customAttribution:"© Crown copyright and database rights "+new Date(Date.now()).getFullYear()+" OS 100019153"
+		})
+	);
+
+	d3.selectAll(".mapboxgl-ctrl-icon").attr("aria-hidden","false")
 
 
 	map.on("load", () => {
-		map.addSource("area", { type: "geojson", data: areas });
+		//map.addSource("area", { type: "geojson", data: areas });
+
+		map.addSource('msoa-centroids', {
+			type: 'vector',
+			"tiles": ["https://cdn.ons.gov.uk/maptiles/administrative/msoa/v1/centroids/{z}/{x}/{y}.pbf"],
+			"promoteId": { "msoacentroids": "areacd" },
+			"bounds": [-5.8,50.0,1.9,55.9],
+			"minzoom":3,
+			"maxzoom":14
+		});
 
 
 
 	//	map.addSource("areabound", { type: "geojson", data: areabounds });
+
+
 
 
 		map.addLayer(
@@ -101,12 +131,13 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 				type: "fill",
 				"source": {
 					"type": "vector",
+					"bounds": [-5.8,50.0,1.9,55.9],
 					//"tiles": ["http://localhost:8000/boundaries/{z}/{x}/{y}.pbf"],
-					"tiles": ["https://cdn.ons.gov.uk/maptiles/t30/boundaries/{z}/{x}/{y}.pbf"],
+					"tiles": ["https://cdn.ons.gov.uk/maptiles/administrative/msoa/v1/boundaries/{z}/{x}/{y}.pbf"],
 				},
 				"source-layer": "boundaries",
 				minzoom: 4,
-				maxzoom: 20,
+				maxzoom: 21,
 				layout: {},
 				paint: {
 					'fill-opacity': [
@@ -114,8 +145,8 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 							  ['linear'],
 							  // ['zoom'] indicates zoom, default at lowest number, threshold, value above threshold
 							  ['zoom'],
-							  8, 0,
-							  9, 1
+							  10, 0,
+							  11, 1
 						],
 					"fill-color": "rgba(255,255,255,0)",
 					// "fill-outline": "grey",
@@ -125,58 +156,47 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 			"place_suburb"
 		);
 
-
 		map.addLayer(
 			{
 				id: "corona",
 				type: "circle",
-				source: "area",
+				"source": 'msoa-centroids',
+				"source-layer": "msoacentroids",
 				paint: {
-					"circle-radius": {
-						property: "casesPI",
-						stops: [
-							[{ zoom: 8, value: 0 }, 0],
-							[{ zoom: 8, value: maxvalue }, 50],
-							[{ zoom: 9, value: 0 }, 0],
-							[{ zoom: 9, value: maxvalue }, 100],
-							[{ zoom: 11, value: 0 }, 0],
-							[{ zoom: 11, value: maxvalue }, 250],
-							[{ zoom: 16, value: 0 }, 0],
-							[{ zoom: 16, value: maxvalue }, 300]
-						]
-					},
+					'circle-radius':
+
+					['interpolate', ['linear'], ['zoom'],
+						4, ['/', ['feature-state', 'casesPI'], 0.5],
+		        8, ['/', ['feature-state', 'casesPI'], 0.5],
+						16, ['/', ['feature-state', 'casesPI'], 0.05]
+		      ],
 					"circle-opacity": 0.9,
-					"circle-color": {
-						property: "cases",
-						stops: [
-							[0, "#abc149"],
-							[maxvalue, "#24a79b"]
-						]
-					}
+					'circle-color':
+						 [
+							 'interpolate', ['linear'],
+							 ['feature-state', 'cases'],
+							 0, '#8ca32a',
+							 maxvalue, '#1D8B84'
+						 ]
 				}
 			},
 			"place_suburb"
 		);
 
+
 		map.addLayer(
 			{
 				id: "coronahover",
 				type: "circle",
-				source: "area",
+				"source": 'msoa-centroids',
+				"source-layer": "msoacentroids",
 				paint: {
-					"circle-radius": {
-						property: "casesPI",
-						stops: [
-							[{ zoom: 8, value: 0 }, 0],
-							[{ zoom: 8, value: maxvalue }, 50],
-							[{ zoom: 9, value: 0 }, 0],
-							[{ zoom: 9, value: maxvalue }, 100],
-							[{ zoom: 11, value: 0 }, 0],
-							[{ zoom: 11, value: maxvalue }, 250],
-							[{ zoom: 16, value: 0 }, 0],
-							[{ zoom: 16, value: maxvalue }, 300]
-						]
-					},
+					'circle-radius': [
+		        'interpolate', ['linear'], ['zoom'],
+						6, ['/', ['feature-state', 'casesPI'], 1],
+		        8, ['/', ['feature-state', 'casesPI'], 0.7],
+						16, ['/', ['feature-state', 'casesPI'], 0.05]
+		      ],
 					"circle-opacity": 0.9,
 					"circle-stroke-color": "black",
 					"circle-stroke-width": 3,
@@ -187,13 +207,19 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 			"place_suburb"
 		);
 
+
 		map.addLayer(
 			 {
 				id: "coronaboundhover",
 				type: "line",
 				"source": {
 					"type": "vector",
-					"tiles": ["https://cdn.ons.gov.uk/maptiles/t30/boundaries/{z}/{x}/{y}.pbf"],
+					"bounds": [-5.8,50.0,1.9,55.9],
+					//"tiles": ["https://cdn.ons.gov.uk/maptiles/t30/boundaries/{z}/{x}/{y}.pbf"],
+					"tiles": ["https://cdn.ons.gov.uk/maptiles/administrative/msoa/v1/boundaries/{z}/{x}/{y}.pbf"],
+					"minzoom":3,
+					"maxzoom":14
+
 					//"tiles": ["https://cdn.ons.gov.uk/maptiles/t23/boundaries/{z}/{x}/{y}.pbf"],
 				},
 				"source-layer": "boundaries",
@@ -211,20 +237,54 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 
 		var bounds = new mapboxgl.LngLatBounds();
 
-		areas.features.forEach(function(feature) {
-			bounds.extend(feature.geometry.coordinates);
-		});
+		// areas.features.forEach(function(feature) {
+		// 	bounds.extend(feature.geometry.coordinates);
+		// });
 
-		map.fitBounds(bounds);
+
+		map.fitBounds([[-5.8,50.0],[1.9,55.9]]);
+
+
+			for (key in dataAll) {
+
+			//	console.log(key);
+
+				map.setFeatureState({
+					source: 'msoa-centroids',
+					sourceLayer: 'msoacentroids',
+					id: key
+				}, {
+					casesPI: Math.sqrt(dataAll[key]/Math.PI),
+					cases: dataAll[key]
+				});
+			}
+
+
+	});
+
+	setLegend()
 
 
 	map.on("mousemove", "coronabound", onMove);
 	map.on("mouseleave", "coronabound", onLeave);
 	map.on("click", "corona", onClick);
 
-			});
+	pymChild.onMessage('update', receiveUpdate);
+
+	function receiveUpdate(updateObj) {
+		pymobj = JSON.parse(updateObj);
+		successpc(pymobj.coordinates.latitude,pymobj.coordinates.longitude)
+		disableMouseEvents();
+		showRemoveSelection();
+	}
+
+
+	map.on('click', function(e) {
+		var features = map.queryRenderedFeatures(e.point);
+	})
 
 	function onMove(e) {
+
 		var oldareacd = "ff";
 
 		newareacd = e.features[0].properties.areacd;
@@ -249,22 +309,13 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 			});
 
 			if (features.length != 0) {
-				setAxisVal(features[0].properties.areanm, features[0].properties.areanmhc, features[0].properties.covid);
+				setAxisVal(e.features[0].properties.areanm, e.features[0].properties.areanmhc, e.features[0].properties.areacd);
 			}
 		}
 	}
 
-	//if pym gets a MSOA code from the parent
-	pymChild.onMessage('update', receiveUpdate);
-
-	function receiveUpdate(updateObj) {
-		pymobj = JSON.parse(updateObj);
-		successpc(pymobj.coordinates.latitude,pymobj.coordinates.longitude)
-		disableMouseEvents();
-		showRemoveSelection();
-	}
-
 	function onClick(e) {
+		console.log(e)
 		var oldareacd = "ff";
 		newareacd = e.features[0].properties.areacd;
 
@@ -281,13 +332,10 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 				"areacd",
 				e.features[0].properties.areacd
 			]);
+			console.log(e.features[0].properties)
 
+			setAxisVal(e.features[0].properties.areanm, e.features[0].properties.areanmhc, e.features[0].properties.areacd);
 
-			setAxisVal(
-				e.features[0].properties.areanm,
-				e.features[0].properties.areanmhc,
-				e.features[0].properties.cases
-			);
 		}
 	}
 
@@ -299,18 +347,165 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 		hideaxisVal();
 	}
 
-
-	function setAxisVal(areanm, areanmhc, areaval) {
-		d3
-			.select("#keyvalue")
+	function setAxisVal(areanm, areanmhc, areacd) {
+		d3.select("#keyvalue")
 			.style("font-weight", "bold")
 			.html(function() {
-				if (!isNaN(areaval)) {
-					return areanmhc + " (MSOA " + areanm + ")<br>" + areaval + " confirmed deaths";
+				if(parseInt(d3.select("body").style("width")) <= 600) {
+					if (!isNaN(dataAll[areacd])) {
+						return areanmhc + "<br>(MSOA " + areanm + ")<br>" + dataAll[areacd] + " deaths";
+					} else {
+						return areanmhc + "<br>(MSOA " + areanm + ")<br>" + dataAll[areacd] + " deaths";
+					}
 				} else {
-					return areanmhc + " (MSOA " + areanm + ")<br>No data available";
+					if (!isNaN(dataAll[areacd])) {
+						return areanmhc + "<br>(MSOA " + areanm + ")<br>";
+					} else {
+						return areanmhc + "<br>(MSOA " + areanm + ")<br>";
+					}
 				}
+
 			});
+
+
+		d3.select("#deathLabel").text("Deaths");
+
+		d3.select("#legendVal0").text(dataAll[areacd]);
+		d3.select("#legendVal1").text(dataMar[areacd]);
+		d3.select("#legendVal2").text(dataApr[areacd]);
+		d3.select("#legendVal3").text(dataMay[areacd]);
+
+		d3.select("#legendx0").style("width", dataAll[areacd] + "px");
+		d3.select("#legendx1").style("width", dataMar[areacd] + "px");
+		d3.select("#legendx2").style("width", dataApr[areacd] + "px");
+		d3.select("#legendx3").style("width", dataMay[areacd] + "px");
+	}
+
+	function setLegend() {
+
+		layernames = ["All","Mar","Apr","May"];
+
+		d3.select("#keydiv").append("div").attr("id","deathLabel").text("").style("position","relative").style("left","117px").style("height","20px")
+
+		legend = d3.select("#keydiv")//.append('ul')
+								// 	.attr('class', 'key')
+									.selectAll('g')
+									.data(["Overall","March","April","May"])
+									.enter()
+									.append('div')
+									.attr('class', function(d, i) { return 'key-item key-' + i + ' b '+ d.replace(' ', '-').toLowerCase(); })
+
+
+								legend.append("input")
+										.style("float","left")
+										.attr("id",function(d,i){return "radio"+i})
+										.attr("class","input input--radio js-focusable")
+										.attr("type","radio")
+										.attr("name","layerchoice")
+										.attr("value", function(d,i){return layernames[i]})
+										.property("checked", function(d,i){if(i==0){return true}})
+										.on("click",repaintLayer)
+
+								legend.append('label')
+								.attr('class','legendlabel').text(function(d,i) {
+									var value = parseFloat(d).toFixed(1);
+									return d;
+								})
+
+								legend.append('label')
+								.attr('class','legendVal')
+								.attr("id",function(d,i){return "legendVal" + i})
+								.text("")
+								.attr("value", function(d,i){return layernames[i]})
+								.on("click",repaintLayer);
+
+								legend.append('div')
+								.attr('class','legendx')
+								.attr("id",function(d,i){return "legendx" + i})
+								.style("width", "0px")
+								.style("height","20px")
+								.style("margin-left","7px")
+								.style("margin-top","10px")
+								.style("background-color","black")
+								.style("position","relative")
+								.style("float","left")
+
+	}
+
+	function repaintLayer() {
+
+		layername = d3.select(this).attr("value");
+
+		if(layername == "All") {
+			for (key in dataAll) {
+
+			//	console.log(key);
+
+				map.setFeatureState({
+					source: 'msoa-centroids',
+					sourceLayer: 'msoacentroids',
+					id: key
+				}, {
+					casesPI: Math.sqrt(eval(dataAll[key])/Math.PI),
+					cases: dataAll[key]
+
+				});
+			}
+
+
+		} else if(layername == "Mar") {
+
+			for (key in dataAll) {
+
+			//	console.log(key);
+
+				map.setFeatureState({
+					source: 'msoa-centroids',
+					sourceLayer: 'msoacentroids',
+					id: key
+				}, {
+					casesPI: Math.sqrt(eval(dataMar[key])/Math.PI),
+					cases: dataMar[key]
+				});
+			}
+
+		} else if(layername == "Apr") {
+
+			for (key in dataAll) {
+
+			//	console.log(key);
+
+				map.setFeatureState({
+					source: 'msoa-centroids',
+					sourceLayer: 'msoacentroids',
+					id: key
+				}, {
+					casesPI: Math.sqrt(eval(dataApr[key])/Math.PI),
+					cases: dataApr[key]
+				});
+			}
+
+		} else if(layername == "May") {
+
+			for (key in dataAll) {
+
+			//	console.log(key);
+
+				map.setFeatureState({
+					source: 'msoa-centroids',
+					sourceLayer: 'msoacentroids',
+					id: key
+				}, {
+					casesPI: Math.sqrt(eval(dataMay[key])/Math.PI),
+					cases: dataMay[key]
+				});
+			}
+
+		}
+
+
+
+
 	}
 
 	function hideaxisVal() {
@@ -318,6 +513,17 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 			.select("#keyvalue")
 			.style("font-weight", "bold")
 			.text("");
+
+
+			d3.selectAll(".legendVal")
+				.text("");
+
+			d3.selectAll("#deathLabel")
+				.text("");
+
+			d3.selectAll(".legendx")
+				.style("width","0px");
+
 	}
 
 	function showRemoveSelection() {
@@ -333,6 +539,7 @@ function ready(error, featureService, /*geogbound,*/ geog) {
 		enableMouseEvents();
 		d3.select("#removeSelection").style("display","none");
 	}
+
 
 	$(".search-control").click(function() {
 		$(".search-control").val('');
@@ -442,7 +649,7 @@ $(document).on('input', '.clearable', function(){
 				]);
 				//var features = map.queryRenderedFeatures(point);
 				disableMouseEvents();
-				setAxisVal(features[0].properties.areanm, features[0].properties.areanmhc, features[0].properties.covid);
+				setAxisVal(features[0].properties.areanm, features[0].properties.areanmhc, features[0].properties.areacd);
 				//updatePercent(features[0]);
 		 		clearInterval(tilechecker);
 		 	}
