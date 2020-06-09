@@ -353,15 +353,15 @@ function ready(error, featureService, /*geogbound, geog*/) {
 			.html(function() {
 				if(parseInt(d3.select("body").style("width")) <= 600) {
 					if (!isNaN(dataAll[areacd])) {
-						return areanmhc + "<br>(MSOA " + areanm + ")<br>" + dataAll[areacd] + " deaths";
+						return areanmhc + "<br><span id='msoacodetext'>MSOA " + areanm + "</span><br>" + dataAll[areacd] + " deaths";
 					} else {
-						return areanmhc + "<br>(MSOA " + areanm + ")<br>" + dataAll[areacd] + " deaths";
+						return areanmhc + "<br><span id='msoacodetext'>MSOA " + areanm + "</span><br>" + dataAll[areacd] + " deaths";
 					}
 				} else {
 					if (!isNaN(dataAll[areacd])) {
-						return areanmhc + "<br>(MSOA " + areanm + ")<br>";
+						return areanmhc + "<br><span id='msoacodetext'>MSOA " + areanm + "</span><br>";
 					} else {
-						return areanmhc + "<br>(MSOA " + areanm + ")<br>";
+						return areanmhc + "<br><span id='msoacodetext'>MSOA " + areanm + "</span><br>";
 					}
 				}
 
