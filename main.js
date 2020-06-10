@@ -164,20 +164,23 @@ function ready(error, featureService, /*geogbound, geog*/) {
 				"source-layer": "msoacentroids",
 				paint: {
 					'circle-radius':
-
-					['interpolate', ['linear'], ['zoom'],
-						4, ['/', ['feature-state', 'casesPI'], 0.5],
-		        8, ['/', ['feature-state', 'casesPI'], 0.5],
-						16, ['/', ['feature-state', 'casesPI'], 0.05]
-		      ],
+            ['interpolate', ['linear'], ['zoom'],
+              4, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.5], 1],
+              8, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.5], 1],
+              16, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.05], 1]
+            ],
 					"circle-opacity": 0.9,
 					'circle-color':
-						 [
-							 'interpolate', ['linear'],
-							 ['feature-state', 'cases'],
-							 0, '#8ca32a',
-							 maxvalue, '#1D8B84'
-						 ]
+            ['case',
+              ['!=', ['feature-state', 'casesPI'], null],
+              [
+                'interpolate', ['linear'],
+                ['feature-state', 'cases'],
+                0, '#8ca32a',
+                maxvalue, '#1D8B84'
+              ],
+              '#8ca32a'
+            ]
 				}
 			},
 			"place_suburb"
@@ -191,12 +194,12 @@ function ready(error, featureService, /*geogbound, geog*/) {
 				"source": 'msoa-centroids',
 				"source-layer": "msoacentroids",
 				paint: {
-					'circle-radius': [
-		        'interpolate', ['linear'], ['zoom'],
-						6, ['/', ['feature-state', 'casesPI'], 1],
-		        8, ['/', ['feature-state', 'casesPI'], 0.7],
-						16, ['/', ['feature-state', 'casesPI'], 0.05]
-		      ],
+					'circle-radius':
+            ['interpolate', ['linear'], ['zoom'],
+              4, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.5], 1],
+              8, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.5], 1],
+              16, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.05], 1]
+            ],
 					"circle-opacity": 0.9,
 					"circle-stroke-color": "black",
 					"circle-stroke-width": 3,
@@ -223,7 +226,7 @@ function ready(error, featureService, /*geogbound, geog*/) {
 					//"tiles": ["https://cdn.ons.gov.uk/maptiles/t23/boundaries/{z}/{x}/{y}.pbf"],
 				},
 				"source-layer": "boundaries",
-				minzoom: 3,
+				minzoom: 8,
 				maxzoom: 20,
 				layout: {},
 				paint: {
