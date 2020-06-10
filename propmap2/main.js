@@ -164,23 +164,20 @@ function ready(error, featureService, /*geogbound, geog*/) {
 				"source-layer": "msoacentroids",
 				paint: {
 					'circle-radius':
-            ['interpolate', ['linear'], ['zoom'],
-              4, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.5], 1],
-              8, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.5], 1],
-              16, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.05], 1]
-            ],
+
+					['interpolate', ['linear'], ['zoom'],
+						4, ['/', ['feature-state', 'casesPI'], 0.5],
+		        8, ['/', ['feature-state', 'casesPI'], 0.5],
+						16, ['/', ['feature-state', 'casesPI'], 0.05]
+		      ],
 					"circle-opacity": 0.9,
 					'circle-color':
-            ['case',
-              ['!=', ['feature-state', 'casesPI'], null],
-              [
-                'interpolate', ['linear'],
-                ['feature-state', 'cases'],
-                0, '#8ca32a',
-                maxvalue, '#1D8B84'
-              ],
-              '#8ca32a'
-            ]
+						 [
+							 'interpolate', ['linear'],
+							 ['feature-state', 'cases'],
+							 0, '#8ca32a',
+							 maxvalue, '#1D8B84'
+						 ]
 				}
 			},
 			"place_suburb"
@@ -194,12 +191,12 @@ function ready(error, featureService, /*geogbound, geog*/) {
 				"source": 'msoa-centroids',
 				"source-layer": "msoacentroids",
 				paint: {
-					'circle-radius':
-            ['interpolate', ['linear'], ['zoom'],
-              4, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.5], 1],
-              8, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.5], 1],
-              16, ['case', ['!=', ['feature-state', 'casesPI'], null], ['/', ['feature-state', 'casesPI'], 0.05], 1]
-            ],
+					'circle-radius': [
+		        'interpolate', ['linear'], ['zoom'],
+						6, ['/', ['feature-state', 'casesPI'], 1],
+		        8, ['/', ['feature-state', 'casesPI'], 0.7],
+						16, ['/', ['feature-state', 'casesPI'], 0.05]
+		      ],
 					"circle-opacity": 0.9,
 					"circle-stroke-color": "black",
 					"circle-stroke-width": 3,
@@ -226,7 +223,7 @@ function ready(error, featureService, /*geogbound, geog*/) {
 					//"tiles": ["https://cdn.ons.gov.uk/maptiles/t23/boundaries/{z}/{x}/{y}.pbf"],
 				},
 				"source-layer": "boundaries",
-				minzoom: 8,
+				minzoom: 3,
 				maxzoom: 20,
 				layout: {},
 				paint: {
@@ -356,15 +353,15 @@ function ready(error, featureService, /*geogbound, geog*/) {
 			.html(function() {
 				if(parseInt(d3.select("body").style("width")) <= 600) {
 					if (!isNaN(dataAll[areacd])) {
-						return areanmhc + "<br><span id='msoacodetext'>MSOA " + areanm + "</span><br>" + dataAll[areacd] + " deaths";
+						return areanmhc + "<br>(MSOA " + areanm + ")<br>" + dataAll[areacd] + " deaths";
 					} else {
-						return areanmhc + "<br><span id='msoacodetext'>MSOA " + areanm + "</span><br>" + dataAll[areacd] + " deaths";
+						return areanmhc + "<br>(MSOA " + areanm + ")<br>" + dataAll[areacd] + " deaths";
 					}
 				} else {
 					if (!isNaN(dataAll[areacd])) {
-						return areanmhc + "<br><span id='msoacodetext'>MSOA " + areanm + "</span><br>";
+						return areanmhc + "<br>(MSOA " + areanm + ")<br>";
 					} else {
-						return areanmhc + "<br><span id='msoacodetext'>MSOA " + areanm + "</span><br>";
+						return areanmhc + "<br>(MSOA " + areanm + ")<br>";
 					}
 				}
 
@@ -432,8 +429,6 @@ function ready(error, featureService, /*geogbound, geog*/) {
 								.style("background-color","black")
 								.style("position","relative")
 								.style("float","left")
-								.style("background-color","#1b5f97")
-
 
 	}
 
